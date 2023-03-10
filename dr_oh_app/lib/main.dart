@@ -12,7 +12,7 @@ void main() async {
   // firebase 연동
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'droh',
+    name: 'DrOh',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Firebase.app();
@@ -32,10 +32,10 @@ class MyApp extends StatelessWidget {
         // 프라이머리 스와치 컬러 : figma > primary-진하게 > colorcode: 5B9D46
         // Update Date: 2023-01-08, SangwonKim
         // color code 변경: primary > 99CD89
-        primarySwatch:
-            ColorService.createMaterialColor(const Color(0xFF99CD89)),
-        primaryColorDark: const Color(0xFF5B9D46),
-        primaryColorLight: const Color(0xFFCCE6C4),
+        primarySwatch: ColorService.createMaterialColor(Color(0xffAACB73)),
+        primaryColorDark: Color(0xffAACB73),
+        primaryColorLight: Color(0xffAACB73),
+        scaffoldBackgroundColor: Color(0xffE5E0FF),
         // Date: 2023-01-07, SangwonKim
         // Desc: app바 테마 설정
         appBarTheme: AppBarTheme(

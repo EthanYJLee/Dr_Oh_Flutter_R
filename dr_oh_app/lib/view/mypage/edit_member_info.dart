@@ -289,11 +289,14 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
         body: SingleChildScrollView(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 100,
+                ),
                 Container(
                   width: 350,
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   decoration: BoxDecoration(
                     border: Border.all(
                       style: BorderStyle.solid,

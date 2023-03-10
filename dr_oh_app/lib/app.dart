@@ -37,7 +37,7 @@ class App extends GetView<BottomNavController> {
             backgroundColor: Colors.transparent.withOpacity(0.1),
             // Date: 2023-01-08, SangwonKim
             // Desc: 내비게이션바 선택된 아이콘 칼라 > primary-진하게 > colorcode: 5B9D46
-            selectedItemColor: const Color(0xFF5B9D46),
+            selectedItemColor: Color(0xffAACB73),
             onTap: controller.changeBottomNav,
             items: const [
               BottomNavigationBarItem(

@@ -330,7 +330,7 @@ class _JoinState extends State<Join> {
                       const Text(
                         "Dr. Oh",
                         style: TextStyle(
-                            color: Color(0xFF99CD89),
+                            color: Color(0xffAEE2FF),
                             fontSize: 50,
                             fontWeight: FontWeight.bold),
                       ),

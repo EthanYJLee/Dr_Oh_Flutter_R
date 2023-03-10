@@ -89,7 +89,6 @@ class _HomeState extends State<Home> {
           },
           child: const Text(
             '검진기록 조회',
-            style: TextStyle(color: Colors.white),
           ),
         )
       ],
@@ -129,8 +128,8 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 22),
       child: Container(
         decoration: BoxDecoration(
+          color: Color(0xffAACB73),
           borderRadius: BorderRadius.circular(5),
-          color: const Color(0xFF99CD89),
         ),
         width: Get.width,
         height: 30,
@@ -143,7 +142,6 @@ class _HomeState extends State<Home> {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -163,7 +161,6 @@ class _HomeState extends State<Home> {
       },
       child: Text(
         title,
-        style: const TextStyle(color: Colors.white),
       ),
     );
   }
@@ -173,7 +170,7 @@ class _HomeState extends State<Home> {
   Widget _news() {
     return Container(
       decoration: _borderBox(),
-      height: 180,
+      height: 120,
       width: 350,
       child: isLoading
           ? Row(
@@ -190,7 +187,7 @@ class _HomeState extends State<Home> {
                       itemCount: news.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          height: 150,
+                          height: 200,
                           width: 180,
                           padding: const EdgeInsets.all(15),
                           child: Card(
@@ -222,7 +219,7 @@ class _HomeState extends State<Home> {
                                     news[index].title,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
-                                    maxLines: 2,
+                                    maxLines: 3,
                                   ),
                                   Text(
                                     news[index].description,
@@ -301,6 +298,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffE5E0FF),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('HOME'),
@@ -394,7 +392,10 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Get.to(const AllCheckupHistory());
                         },
-                        child: const Text('전체기록 보기')),
+                        child: const Text(
+                          '전체기록 보기',
+                          style: TextStyle(color: Colors.black),
+                        )),
                   ],
                 ),
               ),
@@ -402,10 +403,11 @@ class _HomeState extends State<Home> {
               Container(
                 decoration: _borderBox(),
                 width: 350,
-                child: _calendar(),
+                // child: _calendar(),
+                child: Text('검진기록'),
               ),
               _sizedBox(),
-              _head('신체정보'),
+              _head('나의 신체정보'),
               const SizedBox(height: 3),
               Container(
                 decoration: _borderBox(),
@@ -462,7 +464,6 @@ class _HomeState extends State<Home> {
                           },
                           child: const Text(
                             '조회',
-                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
@@ -483,7 +484,6 @@ class _HomeState extends State<Home> {
                           },
                           child: const Text(
                             '조회',
-                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
