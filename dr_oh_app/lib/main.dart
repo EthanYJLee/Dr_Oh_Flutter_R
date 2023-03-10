@@ -12,8 +12,10 @@ void main() async {
   // firebase 연동
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    name: 'droh',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Firebase.app();
   runApp(const MyApp());
 }
 

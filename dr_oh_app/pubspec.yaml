@@ -42,11 +42,12 @@ dependencies:
   cloud_firestore: ^4.3.1
   uuid: ^3.0.7
   provider: ^6.0.5
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.18
   google_sign_in: ^5.4.2
   firebase_storage: ^11.0.10
   firebase_auth: ^4.2.5
-  fl_chart: ^0.55.2 # chart
+  # chart
+  fl_chart: ^0.55.2
   google_maps_flutter: ^2.2.3
   line_chart: ^1.0.9
 
