@@ -1,9 +1,14 @@
 class CheckupHistoryModel {
-  DateTime _checkupHistory = DateTime.now();
-  String _checkupName = '당뇨';
-  int _checkupResult = 0;
+  final DateTime checkupDate;
+  final String diseaseName;
+  final int result;
 
-  DateTime get date => _checkupHistory;
-  String get name => _checkupName;
-  int get result => _checkupResult;
+  CheckupHistoryModel(
+      {required this.checkupDate,
+      required this.diseaseName,
+      required this.result});
+
+  DateTime get date => checkupDate;
+  String get name => diseaseName;
+  // int get result => result;
 }

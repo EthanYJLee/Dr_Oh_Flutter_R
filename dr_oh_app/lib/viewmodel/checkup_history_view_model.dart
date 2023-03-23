@@ -11,9 +11,7 @@ class CheckupHistoryViewModel {
 
   Stream<CheckupHistoryModel> get stream => controller.stream;
 
-  CheckupHistoryViewModel() {
-    _checkupHistoryModel = CheckupHistoryModel();
-  }
+  CheckupHistoryViewModel() {}
 
   //**
   // 이 부분에 검진 결과 불러오는 쿼리 작성하고

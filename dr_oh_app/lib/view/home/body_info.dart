@@ -10,120 +10,125 @@ class BodyInfo extends StatefulWidget {
 }
 
 class _BodyInfoState extends State<BodyInfo> {
+  // TextEditingController ageController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
-  TextEditingController bpController = TextEditingController();
+  // bool correctAge = false;
   bool correctheight = false;
   bool correctweight = false;
 
-  // Desc: 신체정보 입력받는 TextField
-  // Date: 2023-01-11
-  // Widget _typeInfo(dynamic controller, String text) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(left: 100, right: 100),
-  //     child: TextField(
-  //       controller: controller,
-  //       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-  //       decoration: InputDecoration(
-  //         hintText: text,
-  //       ),
-  //       onChanged: (value) {},
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('신체정보 입력'),
-        elevation: 1,
-        actions: const [LogoutBtn()],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: const [
-                Text(
-                  '신체정보 입력',
-                  style: TextStyle(
-                    fontSize: 40,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 100,
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 100, right: 100),
-                  child: TextField(
-                    controller: heightController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      hintText: '키(cm)',
-                      labelText: correctheight ? '' : '키를 입력하세요',
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('신체정보 입력'),
+          elevation: 1,
+          actions: const [LogoutBtn()],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Desc: 나이를 생년월일로 대체
+              // Date: 2023-03-12
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 100, right: 100),
+              //   child: TextField(
+              //     controller: ageController,
+              //     keyboardType:
+              //         const TextInputType.numberWithOptions(decimal: true),
+              //     decoration: InputDecoration(
+              //       hintText: '나이',
+              //       labelText: correctAge ? '' : '나이를 입력하세요',
+              //     ),
+              //     onChanged: (value) {
+              //       if (value.isNotEmpty) {
+              //         setState(() {
+              //           correctAge = true;
+              //         });
+              //       } else {
+              //         setState(() {
+              //           correctAge = false;
+              //         });
+              //       }
+              //     },
+              //   ),
+              // ),
+              const SizedBox(
+                height: 10,
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100, right: 100),
+                    child: TextField(
+                      controller: heightController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        hintText: '키(cm)',
+                        labelText: correctheight ? '' : '키를 입력하세요',
+                      ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            correctheight = true;
+                          });
+                        } else {
+                          setState(() {
+                            correctheight = false;
+                          });
+                        }
+                      },
                     ),
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        setState(() {
-                          correctheight = true;
-                        });
-                      } else {
-                        setState(() {
-                          correctheight = false;
-                        });
-                      }
-                    },
                   ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 100, right: 100),
-                  child: TextField(
-                    controller: weightController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      hintText: '몸무게(kg)',
-                      labelText: correctweight ? '' : '몸무게를 입력하세요',
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100, right: 100),
+                    child: TextField(
+                      controller: weightController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        hintText: '몸무게(kg)',
+                        labelText: correctweight ? '' : '몸무게를 입력하세요',
+                      ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            correctweight = true;
+                          });
+                        } else {
+                          setState(() {
+                            correctweight = false;
+                          });
+                        }
+                      },
                     ),
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        setState(() {
-                          correctweight = true;
-                        });
-                      } else {
-                        setState(() {
-                          correctweight = false;
-                        });
-                      }
-                    },
                   ),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-                ElevatedButton(
-                    onPressed: correctheight && correctweight
-                        ? () {
-                            UserRepository usrr = UserRepository();
-                            usrr.addAction(heightController.text.trim(),
-                                weightController.text.trim());
-                            _showDialog(context);
-                          }
-                        : null,
-                    child: const Text('저장'))
-              ],
-            ),
-          ],
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  ElevatedButton(
+                      onPressed: (correctheight && correctweight)
+                          ? () {
+                              UserRepository usrr = UserRepository();
+                              usrr.addAction(heightController.text.trim(),
+                                  weightController.text.trim());
+                              _showDialog(context);
+                            }
+                          : null,
+                      child: const Text('저장'))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

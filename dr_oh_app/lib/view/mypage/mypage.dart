@@ -156,29 +156,11 @@ class _MyPageState extends State<MyPage> {
             elevation: 4,
             child: Column(
               children: <Widget>[
-                // _btnContentActions(
-                //   "즐겨찾기한 병원",
-                //   const Icon(
-                //     Icons.local_hospital,
-                //     color: Color(0xFF99CD89),
-                //   ),
-                //   const SignOut(),
-                // ),
-                // const Divider(),
-                // _btnContentActions(
-                //   "내가 쓴 글",
-                //   const Icon(
-                //     Icons.payment,
-                //     color: Color(0xFF99CD89),
-                //   ),
-                //   const SignOut(),
-                // ),
-                // const Divider(),
                 _btnContentActions(
                   "회원 탈퇴",
                   const Icon(
                     Icons.info_outline,
-                    color: Color(0xff93C6E7),
+                    color: Color(0xffAACB73),
                   ),
                   const SignOut(),
                 ),
