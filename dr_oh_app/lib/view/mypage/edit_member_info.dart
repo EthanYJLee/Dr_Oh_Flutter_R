@@ -20,8 +20,13 @@ class EditMemberInfo extends StatefulWidget {
 }
 
 class _EditMemberInfoState extends State<EditMemberInfo> {
-  List<String> _dropdownList = ['naver.com', 'gmail.com', 'daum.net', '직접 입력'];
-  String _selectedDropdown = 'naver.com';
+  late List<String> _dropdownList = [
+    'naver.com',
+    'gmail.com',
+    'daum.net',
+    '직접 입력'
+  ];
+  late String _selectedDropdown = 'naver.com';
   RegExp idpwReg = RegExp(r"^[0-9a-z]{8,}$");
   RegExp emailReg = RegExp(r"^[0-9a-z]+$");
 
@@ -32,23 +37,39 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
   TextEditingController dateController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-// Desc: 기존 정보 (Text Field 상의)
-// Date: 2023-01-10
-
   late String id = '';
+  late bool correctpw = true;
+  late bool pwcheck = true;
+  late bool correctEmail = true;
 
-  late String atSign = '@';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initSharedPreferences();
+    // Desc: home에서 받은 유저 정보 화면에 표시
+    // Date: 2023-03-12
+    // youngjin
+    idController.text = widget.user.id.toString();
+    dateController.text = widget.user.birthdate.toString();
+    emailController.text = widget.user.email.toString();
+    nameController.text = widget.user.name.toString();
+  }
 
-  late bool pwcheck;
-  late bool correctpw;
-  late bool correctName;
-  late bool correctEmail;
+  _initSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id = (prefs.getString('id')!);
+    });
+  }
+
+// -------------------------Widget-------------------------
 
 // Desc: 회원정보 수정 항목 + 텍스트필드 조인
 // Date: 2023-01-09
   Widget _joinText(String txt, dynamic tf) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           txt,
@@ -59,34 +80,29 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
     );
   }
 
-// Desc: 이름 수정 TextField
+// Desc: 이름 TextField (수정 불가)
 // Date: 2023-01-10
+// Date: 2023-03-12
   Widget _editName(String hint) {
     return SizedBox(
         height: 70,
-        width: 270,
+        width: Get.width / 2.5,
         child: TextField(
           controller: nameController,
+          readOnly: true,
           textAlign: TextAlign.center,
           decoration: InputDecoration(hintText: hint),
-          onChanged: (value) {
-            if (value.isEmpty) {
-              setState(() {
-                correctName = false;
-              });
-            } else {
-              correctName = true;
-            }
-          },
+          onChanged: (value) {},
         ));
   }
 
-// Desc: 아이디 수정 TextField
+// Desc: 아이디 TextField (수정 불가)
 // Date: 2023-01-10
+// Date: 2023-03-12
   Widget _editID(String hint) {
     return SizedBox(
       height: 70,
-      width: 250,
+      width: Get.width / 2.5,
       child: TextField(
         controller: idController,
         readOnly: true,
@@ -98,10 +114,10 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
 
 // Desc: 비밀번호 수정 TextField
 // Date: 2023-01-10
-  Widget _editPW() {
+  Widget _editPW(String hint) {
     return SizedBox(
-      width: 220,
       height: 70,
+      width: Get.width / 2.5,
       child: TextField(
         controller: passwordController1,
         onChanged: (value) {
@@ -114,6 +130,11 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
               correctpw = false;
             });
           }
+          if (value.trim().isNotEmpty) {
+            setState(() {
+              correctpw = true;
+            });
+          }
         },
         obscureText: true,
         textAlign: TextAlign.center,
@@ -123,10 +144,10 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
 
 // Desc: 비밀번호 확인 TextField
 // Date: 2023-01-10
-  Widget _confirmPW() {
+  Widget _confirmPW(String hint) {
     return SizedBox(
-      width: 200,
       height: 70,
+      width: Get.width / 2.5,
       child: TextField(
         controller: passwordController2,
         onChanged: (value) {
@@ -135,7 +156,9 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
               pwcheck = true;
             });
           } else {
-            pwcheck = false;
+            setState(() {
+              pwcheck = false;
+            });
           }
         },
         obscureText: true,
@@ -149,12 +172,12 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
   Widget _editBirthday(String hint) {
     return SizedBox(
       height: 70,
-      width: 240,
+      width: Get.width / 2.5,
       child: TextField(
         controller: dateController,
         readOnly: true,
         onTap: () {
-          _showDatePickerPop();
+          _showDatePickerPop(hint);
         },
         textAlign: TextAlign.center,
         decoration: InputDecoration(hintText: hint),
@@ -162,78 +185,12 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
     );
   }
 
-// Desc: 이메일 수정 TextField
-// Date: 2023-01-10
-  Widget _editEmail(String hint) {
-    return Flexible(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            width: 240,
-            height: 70,
-            child: TextField(
-              controller: emailController,
-              onChanged: (value) {
-                if (emailController.text.trim().isEmail) {
-                  setState(() {
-                    correctEmail = true;
-                  });
-                } else {
-                  correctEmail = false;
-                }
-              },
-              keyboardType: TextInputType.emailAddress,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(hintText: hint),
-            ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
-          //   child: DropdownButton(
-          //     elevation: 0,
-          //     value: _selectedDropdown,
-          //     items: _dropdownList.map((String item) {
-          //       return DropdownMenuItem<String>(
-          //         value: item,
-          //         child: Text(
-          //           item,
-          //           style: const TextStyle(fontSize: 14),
-          //         ),
-          //       );
-          //     }).toList(),
-          //     onChanged: ((dynamic value) {
-          //       setState(() {
-          //         _selectedDropdown = value;
-          //         if (_selectedDropdown == '직접 입력') {
-          //           atSign = '';
-          //         } else {
-          //           atSign = '@';
-          //         }
-          //       });
-          //       if ((atSign == '' && emailController.text.trim().isEmail) |
-          //           (atSign == '@' &&
-          //               emailReg.hasMatch(emailController.text.trim()))) {
-          //         setState(() {
-          //           correctEmail = true;
-          //         });
-          //       } else {
-          //         correctEmail = false;
-          //       }
-          //     }),
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-
   // Desc: 생년월일 DatePickerDialog
   // Date: 2023-01-10
-  void _showDatePickerPop() async {
+  void _showDatePickerPop(String hint) async {
     Future<DateTime?> selectedDate = showDatePicker(
       context: context,
-      initialDate: DateTime(2022), //초기값
+      initialDate: DateTime.parse(hint), //초기값
       firstDate: DateTime(1950), //시작일
       lastDate: DateTime(2023), //마지막일
       builder: (BuildContext context, Widget? child) {
@@ -251,26 +208,30 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
     });
   }
 
-  _initSharedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      id = (prefs.getString('id') ?? "");
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _initSharedPreferences();
-    idController.text = widget.user.id.toString();
-    dateController.text = widget.user.birthdate.toString();
-    emailController.text = widget.user.email.toString();
-    nameController.text = widget.user.name.toString();
-    correctName = true;
-    correctpw = false;
-    pwcheck = false;
-    correctEmail = true;
+// Desc: 이메일 수정 TextField
+// Date: 2023-01-10
+  Widget _editEmail(String hint) {
+    return SizedBox(
+      height: 70,
+      width: Get.width / 2,
+      child: TextField(
+        controller: emailController,
+        onChanged: (value) {
+          if (emailController.text.trim().isEmail) {
+            setState(() {
+              correctEmail = true;
+            });
+          } else {
+            setState(() {
+              correctEmail = false;
+            });
+          }
+        },
+        keyboardType: TextInputType.emailAddress,
+        textAlign: TextAlign.center,
+        decoration: InputDecoration(hintText: hint),
+      ),
+    );
   }
 
   @override
@@ -289,11 +250,14 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
         body: SingleChildScrollView(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(
+                  height: 100,
+                ),
                 Container(
                   width: 350,
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   decoration: BoxDecoration(
                     border: Border.all(
                       style: BorderStyle.solid,
@@ -311,62 +275,38 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
                   ),
                   child: Column(
                     children: [
-                      StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .where('id', isEqualTo: id)
-                            .snapshots(),
-                        builder: ((context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final documents = snapshot.data!.docs;
-
-                          return documents.map(((e) {
-                            final user = UserModel(
-                              name: e['name'],
-                              id: e['id'],
-                              birthdate: e['birthdate'],
-                              email: e['email']
-                                  .substring(0, e['email'].indexOf('@')),
-                            );
-                            return Column(
-                              children: [
-                                _joinText(
-                                    '이름', _editName(user.name.toString())),
-                                _joinText('아이디', _editID(user.id.toString())),
-                                _joinText('새 비밀번호', _editPW()),
-                                _joinText('비밀번호 확인', _confirmPW()),
-                                _joinText(
-                                    '생년월일',
-                                    _editBirthday(user.birthdate
-                                        .toString()
-                                        .substring(0, 10))),
-                                _joinText(
-                                    '이메일', _editEmail(user.email.toString())),
-                              ],
-                            );
-                          })).first;
-                        }),
-                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            _joinText(
+                                '이름', _editName(widget.user.name.toString())),
+                            _joinText(
+                                '아이디', _editID(widget.user.id.toString())),
+                            _joinText('새 비밀번호', _editPW('')),
+                            _joinText('비밀번호 확인', _confirmPW('')),
+                            _joinText(
+                                '생년월일',
+                                _editBirthday(widget.user.birthdate
+                                    .toString()
+                                    .substring(0, 10))),
+                            _joinText('이메일',
+                                _editEmail(widget.user.email.toString())),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
+                  padding: const EdgeInsets.only(top: 30.0),
                   child: ElevatedButton(
-                      onPressed:
-                          // correctName && correctpw && pwcheck && correctEmail
-                          //     ? () {
-                          //         _dialog();
-                          //       }
-                          //     : null,
-                          () {
-                        correctName && correctpw && pwcheck && correctEmail
-                            ? _dialog()
-                            : null;
+                      onPressed: () {
+                        setState(() {
+                          (correctpw && pwcheck && correctEmail)
+                              ? _dialog()
+                              : _errorDialog();
+                        });
                       },
                       child: const Text('수정')),
                 )
@@ -387,10 +327,39 @@ class _EditMemberInfoState extends State<EditMemberInfo> {
         title: '시스템',
         message: '회원정보를 수정하시겠습니까?',
         okCallback: () {
+          UserRepository userRep = UserRepository();
+          userRep.updateUser(nameController.text, passwordController1.text,
+              emailController.text, dateController.text);
+
+          setState(() {
+            showDialog(
+                context: context,
+                builder: (context) => MessagePopup(
+                    title: '수정완료',
+                    message: '회원정보가 수정되었습니다',
+                    okCallback: () {
+                      Get.to(const App());
+                    }));
+          });
+        },
+        cancelCallback: () {
+          Get.back();
+        },
+      ),
+    );
+  }
+
+  _errorDialog() {
+    showDialog(
+      context: Get.context!,
+      builder: (context) => MessagePopup(
+        title: '정보 확인',
+        message: '입력하신 정보를 확인해주세요',
+        okCallback: () {
           UserRepository usrr = UserRepository();
           usrr.updateUser(nameController.text, passwordController1.text,
               emailController.text, dateController.text);
-          Get.to(const App());
+          Get.back();
         },
         cancelCallback: () {
           Get.back();

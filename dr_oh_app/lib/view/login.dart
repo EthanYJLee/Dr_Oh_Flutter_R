@@ -170,6 +170,9 @@ class _LoginState extends State<Login> {
             },
           );
         },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xffAACB73),
+        ),
         child: const Text('로그인'),
       ),
     );
@@ -204,6 +207,7 @@ class _LoginState extends State<Login> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Color(0xffE5E0FF),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
@@ -215,7 +219,7 @@ class _LoginState extends State<Login> {
                   const Text(
                     "Dr. Oh",
                     style: TextStyle(
-                        color: Color(0xFF99CD89),
+                        color: Color.fromARGB(255, 213, 163, 236),
                         fontSize: 50,
                         fontWeight: FontWeight.bold),
                   ),
@@ -231,7 +235,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 30),
                   TextButton(
                     onPressed: () {
-                      signInWithGoogle();
+                      // signInWithGoogle();
                     },
                     child: const Text(
                       '구글로 계속하기',

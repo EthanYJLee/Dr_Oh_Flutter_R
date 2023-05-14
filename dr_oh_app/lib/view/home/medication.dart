@@ -3,6 +3,7 @@ import 'package:dr_oh_app/components/logout_btn.dart';
 import 'package:dr_oh_app/model/medication_model.dart';
 import 'package:dr_oh_app/viewmodel/my_history_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Medication extends StatefulWidget {
@@ -12,7 +13,7 @@ class Medication extends StatefulWidget {
   State<Medication> createState() => _MedicationState();
 }
 
-class _MedicationState extends State<Medication> {
+class _MedicationState extends State<Medication> with TickerProviderStateMixin {
   DateTimeRange? _selectedDateRange;
   TextEditingController _startDateController = TextEditingController();
   TextEditingController _endDateController = TextEditingController();
@@ -21,27 +22,49 @@ class _MedicationState extends State<Medication> {
   TextEditingController _pillController = TextEditingController();
   late String id = '';
   late String docId = '';
+  // late AnimationController controller;
 
+  @override
+  void initState() {
+    // controller = AnimationController(
+    //   /// [AnimationController]s can be created with `vsync: this` because of
+    //   /// [TickerProviderStateMixin].
+    //   vsync: this,
+    //   duration: const Duration(seconds: 5),
+    // )..addListener(() {
+    //     setState(() {});
+    //   });
+    // controller.repeat(reverse: true);
+    super.initState();
+    _initSharedPreferences().then((_) => _getDocId(id));
+  }
+
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
+
+  _initSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id = prefs.getString('id') ?? '';
+    });
+  }
+
+  // Desc: document ID 불러오기
+  // Date: 2023-03-12
+  // youngjin
   Future<void> _getDocId(String id) async {
     var data = await FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: id)
         .get();
-    docId = data.docs.first.id;
-  }
-
-  _initSharedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      id = prefs.getString('id').toString();
+      docId = data.docs.first.id;
     });
-    _getDocId(id);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initSharedPreferences();
+    print(docId);
+    // print(data.docs.first.data());
   }
 
   Widget _dateTextfield(dynamic controller, String hint) {
@@ -146,23 +169,34 @@ class _MedicationState extends State<Medication> {
                     .snapshots(),
                 builder: ((context, snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator()
+                          // LinearProgressIndicator(
+                          //   value: controller.value,
+                          //   semanticsLabel: 'Linear progress indicator',
+                          // ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    final documents = snapshot.data!.docs;
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children:
+                              documents.map((e) => _getMedication(e)).toList(),
+                        ),
+                      ],
                     );
                   }
-                  final documents = snapshot.data!.docs;
-
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ListView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children:
-                            documents.map((e) => _getMedication(e)).toList(),
-                      ),
-                    ],
-                  );
                 })),
             Wrap(
               direction: Axis.horizontal,

@@ -29,6 +29,7 @@ class _HomeState extends State<Home> {
   List<NewsModel> news = [];
   bool isLoading = true;
   NewsAPI newsAPI = NewsAPI();
+  late String hasBodyInfo = '입력하러 가기';
   Future initNews() async {
     news = await newsAPI.getNews();
   }
@@ -89,7 +90,6 @@ class _HomeState extends State<Home> {
           },
           child: const Text(
             '검진기록 조회',
-            style: TextStyle(color: Colors.white),
           ),
         )
       ],
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
     return BoxDecoration(
       border: Border.all(
         style: BorderStyle.solid,
-        width: 1,
+        width: 0.3,
       ),
       borderRadius: BorderRadius.circular(5),
       color: Colors.white,
@@ -126,13 +126,13 @@ class _HomeState extends State<Home> {
   // Date: 2023-01-09
   Widget _head(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Container(
         decoration: BoxDecoration(
+          color: Color(0xffAACB73),
           borderRadius: BorderRadius.circular(5),
-          color: const Color(0xFF99CD89),
         ),
-        width: Get.width,
+        width: Get.width / 2.2,
         height: 30,
         child: Padding(
           padding: const EdgeInsets.only(left: 20),
@@ -143,7 +143,36 @@ class _HomeState extends State<Home> {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _newsHead(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xffAACB73),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        width: Get.width / 1.1,
+        height: 30,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -163,7 +192,6 @@ class _HomeState extends State<Home> {
       },
       child: Text(
         title,
-        style: const TextStyle(color: Colors.white),
       ),
     );
   }
@@ -173,8 +201,8 @@ class _HomeState extends State<Home> {
   Widget _news() {
     return Container(
       decoration: _borderBox(),
-      height: 180,
-      width: 350,
+      height: 120,
+      width: Get.width / 1.1,
       child: isLoading
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -190,9 +218,9 @@ class _HomeState extends State<Home> {
                       itemCount: news.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          height: 150,
-                          width: 180,
-                          padding: const EdgeInsets.all(15),
+                          height: 200,
+                          width: 150,
+                          padding: const EdgeInsets.all(5),
                           child: Card(
                             elevation: 2,
                             child: InkWell(
@@ -222,7 +250,7 @@ class _HomeState extends State<Home> {
                                     news[index].title,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
-                                    maxLines: 2,
+                                    maxLines: 5,
                                   ),
                                   Text(
                                     news[index].description,
@@ -269,7 +297,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     '키 : ${bodyinfo.height}cm',
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 18,
                     ),
                   ),
                 ),
@@ -278,7 +306,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     '몸무게 : ${bodyinfo.weight}kg',
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 18,
                     ),
                   ),
                 ),
@@ -301,6 +329,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffE5E0FF),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('HOME'),
@@ -313,17 +342,16 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Container(
                   decoration: _borderBox(),
                   width: 350,
-                  padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(
                         height: 60,
-                        width: 300,
+                        width: 250,
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('users')
@@ -356,15 +384,20 @@ class _HomeState extends State<Home> {
                         child: SizedBox(
                           height: 30,
                           width: 20,
-                          child: IconButton(
+                          child: TextButton(
                             onPressed: () async {
-                              UserRepository usrr = UserRepository();
-                              UserModel user = await usrr.getUserInfo();
+                              UserRepository userRep = UserRepository();
+                              UserModel user = await userRep.getUserInfo();
                               Get.to(EditMemberInfo(user: user));
                             },
-                            icon: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 15,
+                            child: Row(
+                              children: const [
+                                Text('수정하기'),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 15,
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -385,7 +418,9 @@ class _HomeState extends State<Home> {
                       stream: _checkupHistoryViewModel.stream,
                       builder: (context, snapshot) {
                         return Text(
-                          '마지막 검진일은 ${_checkupHistoryViewModel.date.toString().substring(0, 10)} 입니다.',
+                          // '마지막 검진일은 ${_checkupHistoryViewModel.date.toString().substring(0, 10)} 입니다.',
+                          '최근 검진기록이 없습니다',
+
                           style: const TextStyle(fontSize: 14),
                         );
                       },
@@ -394,109 +429,128 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Get.to(const AllCheckupHistory());
                         },
-                        child: const Text('전체기록 보기')),
+                        child: const Text(
+                          '전체기록 보기',
+                          style: TextStyle(color: Colors.black),
+                        )),
                   ],
                 ),
               ),
               _sizedBox(),
-              Container(
-                decoration: _borderBox(),
-                width: 350,
-                child: _calendar(),
-              ),
-              _sizedBox(),
-              _head('신체정보'),
-              const SizedBox(height: 3),
-              Container(
-                decoration: _borderBox(),
-                height: 200,
-                width: 350,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 100,
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .where('id', isEqualTo: id)
-                            .snapshots(),
-                        builder: ((context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final documents = snapshot.data!.docs;
-
-                          return ListView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            children:
-                                documents.map((e) => _getBodyinfo(e)).toList(),
-                          );
-                        }),
-                      ),
-                    ),
-                    _button(const BodyInfo(), '입력하러 가기'),
-                  ],
-                ),
-              ),
-              _sizedBox(),
-              _head('이력조회'),
-              const SizedBox(height: 3),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: _borderBox(),
-                    width: 165,
-                    child: Column(
-                      children: [
-                        const Text(
-                          '최근 내원이력',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                  Column(
+                    children: [
+                      _head('나의 신체정보'),
+                      const SizedBox(height: 3),
+                      Container(
+                        decoration: _borderBox(),
+                        height: 200,
+                        width: Get.width / 2.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 100,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .where('id', isEqualTo: id)
+                                    .snapshots(),
+                                builder: ((context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else {
+                                    final documents = snapshot.data!.docs;
+                                    hasBodyInfo = '정보 수정';
+
+                                    return ListView(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      children: documents
+                                          .map((e) => _getBodyinfo(e))
+                                          .toList(),
+                                    );
+                                  }
+                                }),
+                              ),
+                            ),
+                            _button(const BodyInfo(), hasBodyInfo),
+                          ],
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.to(HospitalVisit());
-                          },
-                          child: const Text(
-                            '조회',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    decoration: _borderBox(),
-                    width: 165,
-                    child: Column(
-                      children: [
-                        const Text(
-                          '최근 투약이력',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                  Column(
+                    children: [
+                      _head('이력조회'),
+                      const SizedBox(height: 3),
+                      Container(
+                        decoration: _borderBox(),
+                        height: 100,
+                        width: Get.width / 2.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              '최근 내원이력',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.to(HospitalVisit());
+                              },
+                              child: const Text(
+                                '조회',
+                              ),
+                            ),
+                          ],
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.to(const Medication());
-                          },
-                          child: const Text(
-                            '조회',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      ),
+                      Container(
+                        decoration: _borderBox(),
+                        height: 100,
+                        width: Get.width / 2.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              '최근 투약이력',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.to(Medication());
+                              },
+                              child: const Text(
+                                '조회',
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               _sizedBox(),
-              _head('뉴스'),
-              const SizedBox(
-                height: 3,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      _newsHead('뉴스'),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      _news(),
+                    ],
+                  ),
+                ],
               ),
-              _news(),
             ],
           ),
         ),

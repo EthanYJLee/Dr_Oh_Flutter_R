@@ -35,7 +35,7 @@ class _MyPageState extends State<MyPage> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(7),
-          color: const Color(0xFF99CD89),
+          color: const Color(0xffAACB73),
         ),
         width: Get.width,
         height: 30,
@@ -94,9 +94,7 @@ class _MyPageState extends State<MyPage> {
                       },
                       child: const Text(
                         '수정',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                     ),
                   ),
@@ -158,29 +156,11 @@ class _MyPageState extends State<MyPage> {
             elevation: 4,
             child: Column(
               children: <Widget>[
-                // _btnContentActions(
-                //   "즐겨찾기한 병원",
-                //   const Icon(
-                //     Icons.local_hospital,
-                //     color: Color(0xFF99CD89),
-                //   ),
-                //   const SignOut(),
-                // ),
-                // const Divider(),
-                // _btnContentActions(
-                //   "내가 쓴 글",
-                //   const Icon(
-                //     Icons.payment,
-                //     color: Color(0xFF99CD89),
-                //   ),
-                //   const SignOut(),
-                // ),
-                // const Divider(),
                 _btnContentActions(
                   "회원 탈퇴",
                   const Icon(
                     Icons.info_outline,
-                    color: Color(0xFF99CD89),
+                    color: Color(0xffAACB73),
                   ),
                   const SignOut(),
                 ),
@@ -205,7 +185,7 @@ class _MyPageState extends State<MyPage> {
                   "당뇨병 차트 기록",
                   const Icon(
                     Icons.bar_chart,
-                    color: Color(0xFF99CD89),
+                    color: Color(0xffAACB73),
                   ),
                   // 2023-01-13, SangwonKim
                   // Desc: 당뇨병 차트 기록으로 가기
@@ -216,7 +196,7 @@ class _MyPageState extends State<MyPage> {
                   "뇌졸중 차트 기록",
                   const Icon(
                     Icons.show_chart,
-                    color: Color(0xFF99CD89),
+                    color: Color(0xffAACB73),
                   ),
                   // 2023-01-13, SangwonKim
                   // Desc: 뇌졸중 차트 기록으로 가기
@@ -227,7 +207,7 @@ class _MyPageState extends State<MyPage> {
                   "치매 차트 기록",
                   const Icon(
                     Icons.area_chart,
-                    color: Color(0xFF99CD89),
+                    color: Color(0xffAACB73),
                   ),
                   // 2023-01-13, SangwonKim
                   // Desc: 뇌졸중 차트 기록으로 가기
@@ -238,7 +218,7 @@ class _MyPageState extends State<MyPage> {
                   "BMI 차트 기록",
                   const Icon(
                     Icons.pie_chart,
-                    color: Color(0xFF99CD89),
+                    color: Color(0xffAACB73),
                   ),
                   // 2023-01-13, SangwonKim
                   // Desc: BMI 차트 기록으로 가기
@@ -340,7 +320,7 @@ class _MyPageState extends State<MyPage> {
             const Text(
               "Dr. Oh",
               style: TextStyle(
-                  color: Color(0xFF99CD89),
+                  color: Color(0xffAACB73),
                   fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),

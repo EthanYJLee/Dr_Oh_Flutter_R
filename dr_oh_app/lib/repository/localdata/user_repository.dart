@@ -57,33 +57,39 @@ class UserRepository {
     }
   }
 
-  //Desc: 사용자 정보 가져오기
-  //Date: 2023-01-12
+  // Desc: 사용자 정보 가져오기
+  // Date: 2023-01-12
+
+  
   Future<UserModel> getUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     String id = (prefs.getString('id') ?? "");
-    var docs1 = await FirebaseFirestore.instance
+    var user = await FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: id)
         .get();
-    var docs2 = docs1.docs.first.data();
+    var data = user.docs.first.data();
 
-    return UserModel.fromJson(docs2);
+    return UserModel.fromJson(data);
   }
 
-  //Desc: 사용자 정보 수정
-  //Date: 2023-01-12
-  updateUser(String name, String pw, String email, String bdate) async {
+  // Desc: 사용자 정보 수정
+  // Date: 2023-01-12
+  // Date: 2023-03-12
+
+  updateUser(String name, String pw, String email, String birthdate) async {
     final prefs = await SharedPreferences.getInstance();
-    String id = (prefs.getString('id') ?? "");
+    String id = (prefs.getString('id')!);
     var docs1 = await FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: id)
         .get();
     var docs2 = docs1.docs.first.id;
 
-    FirebaseFirestore.instance.collection('users').doc(docs2).update(
-        {'name': name, 'password': pw, 'birthdate': bdate, 'email': email});
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(docs2)
+        .update({'password': pw, 'birthdate': birthdate, 'email': email});
   }
 
   //Desc: 사용자 신체 정보 수정
